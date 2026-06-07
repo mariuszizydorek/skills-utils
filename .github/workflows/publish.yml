@@ -4,12 +4,38 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g. 0.2.0). Required for manual runs."
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 jobs:
+  resolve-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.derive.outputs.version }}
+    steps:
+      - id: derive
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            RAW="${{ github.event.release.tag_name }}"
+          else
+            RAW="${{ inputs.version }}"
+          fi
+          VERSION="${RAW#v}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Version '$VERSION' is not valid semver (expected X.Y.Z)."
+            exit 1
+          fi
+          echo "Resolved version: $VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
   publish-python:
+    needs: resolve-version
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
@@ -19,6 +45,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Set version in pyproject.toml
+        run: |
+          cd python
+          python - <<'PY'
+          import os, re, pathlib
+          version = os.environ["VERSION"]
+          path = pathlib.Path("pyproject.toml")
+          text = path.read_text()
+          new, count = re.subn(r'(?m)^version = "[^"]+"', f'version = "{version}"', text, count=1)
+          if count == 0:
+              raise SystemExit("No version line found in pyproject.toml")
+          path.write_text(new)
+          print(f"pyproject.toml version set to {version}")
+          PY
+        env:
+          VERSION: ${{ needs.resolve-version.outputs.version }}
       - name: Build Python package
         run: |
           pip install build
@@ -30,6 +72,7 @@ jobs:
           packages-dir: python/dist/
 
   publish-node:
+    needs: resolve-version
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -41,6 +84,12 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: node/package-lock.json
+      - name: Set version in package.json
+        run: |
+          cd node
+          npm version --no-git-tag-version --allow-same-version "$VERSION"
+        env:
+          VERSION: ${{ needs.resolve-version.outputs.version }}
       - name: Build and publish Node package
         run: |
           cd node
