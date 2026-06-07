@@ -126,6 +126,7 @@ Notes for npm trusted publishing:
 - npm trusted publishing removes `NPM_TOKEN` from GitHub secrets.
 - If package does not exist yet, do one bootstrap manual publish before setting trusted publisher.
 - Use `npm publish --access public --provenance` in CI (already configured).
+- If package exists but CI returns `404 Not Found` on `PUT`, trusted publisher is not configured (or mismatched) for this repo/workflow on npm.
 
 Optional fallback (token-based CI, not recommended):
 
