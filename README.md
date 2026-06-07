@@ -19,14 +19,14 @@ Agent skills are folders with a `SKILL.md` file. Repos like [`anthropics/skills`
 ### Python (PyPI)
 
 ```bash
-pip install skills-sync
+pip install skills-utils-mi
 skills-sync doctor
 ```
 
 ### Node (npm)
 
 ```bash
-npm install -g skills-sync-node
+npm install -g skills-sync-node-mi
 skills-sync-node doctor
 ```
 
@@ -112,12 +112,12 @@ cd node && npm run build && npm test
 
 ### Publishing (maintainers)
 
-**PyPI** package: `skills-sync`  
-**npm** package: `skills-sync-node`
+**PyPI** package: `skills-utils-mi`  
+**npm** package: `skills-sync-node-mi`
 
 One-time setup:
 
-1. Create a [PyPI API token](https://pypi.org/manage/account/token/) with upload scope for `skills-sync`
+1. Create a [PyPI API token](https://pypi.org/manage/account/token/) with upload scope for `skills-utils-mi`
 2. Create an [npm access token](https://www.npmjs.com/settings/~youruser/tokens) with publish scope
 3. For GitHub Actions (recommended): add repo secrets `NPM_TOKEN` and enable [PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/) for this repo
 
@@ -128,7 +128,7 @@ Manual publish:
 
 # PyPI (use __token__ as username, API token as password)
 cd python
-twine upload dist/skills_sync-*
+twine upload dist/skills_utils_mi-*
 
 # npm
 cd node

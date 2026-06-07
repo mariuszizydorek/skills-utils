@@ -1,5 +1,5 @@
 {
-  "name": "skills-sync-node",
+  "name": "skills-sync-node-mi",
   "version": "0.1.0",
   "description": "Sync agent skills from GitHub repos via API (Node.js)",
   "type": "module",

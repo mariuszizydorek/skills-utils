@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "skills-sync"
+name = "skills-utils-mi"
 version = "0.1.0"
 description = "Sync agent skills from GitHub repos via API"
 readme = "../README.md"
