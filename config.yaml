@@ -1,0 +1,32 @@
+repos:
+  anthropics:
+    owner: anthropics
+    repo: skills
+    branch: main
+    skills_path: skills
+
+agents:
+  cursor:
+    label: Cursor (personal)
+    skills_dir: ~/.cursor/skills
+    exclude_dirs: [skills-cursor]
+    scope: user
+  claude-code:
+    label: Claude Code (personal)
+    skills_dir: ~/.claude/skills
+    scope: user
+  claude-code-project:
+    label: Claude Code (project)
+    skills_dir: .claude/skills
+    scope: project
+  cursor-project:
+    label: Cursor (project)
+    skills_dir: .cursor/skills
+    scope: project
+  copilot-project:
+    label: Copilot (project)
+    skills_dir: .github/skills
+    scope: project
+
+defaults:
+  flat_symlinks: true

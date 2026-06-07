@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "skills-sync"
+version = "0.1.0"
+description = "Sync agent skills from GitHub repos via API"
+readme = "../README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Mariusz Izydorek" }]
+keywords = ["cursor", "claude", "skills", "github", "cli"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "httpx>=0.27",
+    "inquirerpy>=0.3.4",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/mariuszizydorek/skills-utils"
+Repository = "https://github.com/mariuszizydorek/skills-utils"
+Issues = "https://github.com/mariuszizydorek/skills-utils/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "build>=1.0"]
+
+[project.scripts]
+skills-sync = "skills_utils.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/skills_utils"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/README.md",
+  "/LICENSE",
+  "src/skills_utils",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: tests that call the GitHub API",
+]
