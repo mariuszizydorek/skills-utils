@@ -3,12 +3,6 @@ name: Publish
 on:
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version to publish (e.g. 0.2.0). Required for manual runs."
-        required: true
-        type: string
 
 permissions:
   contents: read
@@ -21,11 +15,7 @@ jobs:
     steps:
       - id: derive
         run: |
-          if [[ "${{ github.event_name }}" == "release" ]]; then
-            RAW="${{ github.event.release.tag_name }}"
-          else
-            RAW="${{ inputs.version }}"
-          fi
+          RAW="${{ github.event.release.tag_name }}"
           VERSION="${RAW#v}"
           if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
             echo "::error::Version '$VERSION' is not valid semver (expected X.Y.Z)."

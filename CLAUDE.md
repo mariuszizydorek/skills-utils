@@ -45,11 +45,11 @@ gh release create v0.2.0 --generate-notes
 ```
 
 Publishing is automated via `.github/workflows/publish.yml` on GitHub Release:
-- `resolve-version` job derives `X.Y.Z` from the release tag (or `workflow_dispatch` input) and validates semver.
+- `resolve-version` job derives `X.Y.Z` from the release tag and validates semver.
 - `publish-python` patches `pyproject.toml`, builds, publishes to PyPI via trusted publishing (OIDC, `environment: pypi`). **Verified working.**
 - `publish-node` patches `package.json` via `npm version --no-git-tag-version`, builds, publishes to npm via trusted publishing with `--provenance`. The workflow `unset`s `NPM_TOKEN`/`NODE_AUTH_TOKEN` before publishing — don't reintroduce token auth without reading the README's publishing notes.
 
-**npm trusted-publisher gotcha**: as of last failed run, the npm OIDC handshake returned `ENEEDAUTH`, which means trusted publisher is misconfigured on npmjs.com. Verify under package settings for `skills-sync-node-mi`: provider=`GitHub Actions`, owner=`mariuszizydorek`, repository=`skills-utils`, workflow=`publish.yml` (filename, not display name), environment left blank. PyPI requires `environment: pypi`; npm trusted publishing does **not** use the environment field.
+**npm trusted-publisher gotcha**: if npm publish returns `ENEEDAUTH` or `404 Not Found` during CI publish, verify npm trusted publisher settings for `skills-sync-node-mi`: provider=`GitHub Actions`, owner=`mariuszizydorek`, repository=`skills-utils`, workflow=`publish.yml` (filename, not display name), environment left blank. PyPI requires `environment: pypi`; npm trusted publishing does **not** use the environment field.
 
 ## Architecture
 
@@ -62,7 +62,7 @@ Both implementations share the same module layout (Python `snake_case` ↔ Node 
 | `github` | Thin GitHub REST client; auth from `--token`, `GITHUB_TOKEN`, or `gh auth token` |
 | `repos` | Fetches commit SHA + tree, builds `RemoteSkill` inventory, downloads files into `cache/` |
 | `repo_parse` / `repoParse` | Parses `owner/repo`, URLs, and derives default slugs |
-| `agents` | Resolves per-agent install dirs (user `~/.claude/skills` vs project `.claude/skills`); project-scoped agents resolve relative to CWD/git root |
+| `agents` | Resolves per-agent install dirs (user `~/.claude/skills` vs project `.claude/skills`); project-scoped agents resolve relative to CWD |
 | `scanner` | Walks installed skills, computes `installed_hash`, compares with manifest + remote fingerprint to assign status (`synced`/`outdated`/`modified`/`diverged`/`missing`) |
 | `hash` | Deterministic directory hashing — **algorithm is part of the spec**, see `docs/manifest-schema.md` |
 | `sync` | Applies install/remove/update plan; writes nested `<skills_dir>/<repo_slug>/<skill>/` and flat symlinks `<skills_dir>/<skill> → <repo_slug>/<skill>` when `flat_symlinks: true` |
