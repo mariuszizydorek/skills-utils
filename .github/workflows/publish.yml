@@ -90,6 +90,20 @@ jobs:
           npm version --no-git-tag-version --allow-same-version "$VERSION"
         env:
           VERSION: ${{ needs.resolve-version.outputs.version }}
+      - name: Prepare npm trusted publishing
+        run: |
+          node --version
+          npm --version
+          npm install -g npm@latest
+          npm --version
+          NPMRC_PATH="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+          if [ -f "$NPMRC_PATH" ]; then
+            sed -i '/_authToken/d' "$NPMRC_PATH"
+          fi
+          if [ -f "$HOME/.npmrc" ] && [ "$HOME/.npmrc" != "$NPMRC_PATH" ]; then
+            sed -i '/_authToken/d' "$HOME/.npmrc"
+          fi
+          npm config set registry https://registry.npmjs.org/
       - name: Build and publish Node package
         run: |
           cd node
