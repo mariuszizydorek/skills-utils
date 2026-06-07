@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>skills-sync Troubleshooting</title>
+    <style>
+      :root {
+        --bg: #0a0f1a;
+        --bg-elev: #10182a;
+        --bg-panel: #0f1524;
+        --line: #27304a;
+        --text: #d8e1ff;
+        --text-muted: #9ea9cb;
+        --accent: #54a8ff;
+        --accent-2: #76ffd5;
+        --ok: #5fffa1;
+        --warn: #ffd166;
+        --danger: #ff738f;
+        --shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background:
+          radial-gradient(1200px 700px at -10% -20%, rgba(84, 168, 255, 0.18), transparent 52%),
+          radial-gradient(900px 600px at 110% -10%, rgba(118, 255, 213, 0.14), transparent 45%),
+          var(--bg);
+        color: var(--text);
+        font:
+          16px/1.55 "IBM Plex Sans", "Segoe UI", "Helvetica Neue", "Arial",
+          sans-serif;
+      }
+
+      code,
+      pre {
+        font-family:
+          "JetBrains Mono", "SFMono-Regular", "Consolas", "Liberation Mono",
+          monospace;
+      }
+
+      .container {
+        width: min(1100px, 92vw);
+        margin: 0 auto;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        backdrop-filter: blur(8px);
+        background: rgba(10, 15, 26, 0.76);
+        border-bottom: 1px solid rgba(84, 168, 255, 0.2);
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.9rem 0;
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+      }
+
+      .logo-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 0 16px rgba(84, 168, 255, 0.75);
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        color: var(--text);
+        text-decoration: none;
+        border: 1px solid var(--line);
+        background: linear-gradient(180deg, #121d33, #0f182d);
+        padding: 0.48rem 0.8rem;
+        border-radius: 10px;
+        font-size: 0.92rem;
+      }
+
+      .btn:hover {
+        border-color: var(--accent);
+      }
+
+      main {
+        padding: 2.1rem 0 4rem;
+      }
+
+      .hero {
+        background: linear-gradient(180deg, rgba(84, 168, 255, 0.08), rgba(84, 168, 255, 0.01));
+        border: 1px solid rgba(84, 168, 255, 0.24);
+        border-radius: 20px;
+        padding: 1.25rem 1.35rem;
+        box-shadow: var(--shadow);
+      }
+
+      .eyebrow {
+        margin: 0 0 0.45rem;
+        font-size: 0.82rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--accent-2);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.6rem, 2.2vw + 1rem, 2.5rem);
+        line-height: 1.2;
+      }
+
+      .hero p {
+        margin: 0.7rem 0 0;
+        color: var(--text-muted);
+        max-width: 78ch;
+      }
+
+      .grid {
+        margin-top: 1.2rem;
+        display: grid;
+        gap: 0.95rem;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .pill {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--bg-panel);
+        padding: 0.8rem 0.9rem;
+      }
+
+      .pill strong {
+        display: block;
+        margin-bottom: 0.3rem;
+        font-size: 0.95rem;
+      }
+
+      .pill span {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      .layout {
+        margin-top: 1.4rem;
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 260px minmax(0, 1fr);
+      }
+
+      aside {
+        position: sticky;
+        top: 72px;
+        align-self: start;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg-panel);
+        padding: 0.95rem;
+      }
+
+      aside h2 {
+        font-size: 0.88rem;
+        margin: 0 0 0.55rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+
+      .toc {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin: 0.25rem 0;
+      }
+
+      .toc a {
+        display: block;
+        color: var(--text);
+        text-decoration: none;
+        font-size: 0.92rem;
+        padding: 0.38rem 0.5rem;
+        border-radius: 8px;
+      }
+
+      .toc a:hover {
+        background: rgba(84, 168, 255, 0.13);
+      }
+
+      section {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--bg-panel);
+        box-shadow: var(--shadow);
+        padding: 1rem 1rem 1.1rem;
+        margin-bottom: 1rem;
+      }
+
+      section h2 {
+        margin: 0.1rem 0 0.7rem;
+        font-size: 1.25rem;
+      }
+
+      section h3 {
+        margin: 1rem 0 0.5rem;
+        font-size: 1.02rem;
+        color: #e7eeff;
+      }
+
+      p,
+      li {
+        color: var(--text-muted);
+      }
+
+      ul,
+      ol {
+        margin: 0.5rem 0 0.2rem 1.1rem;
+        padding: 0;
+      }
+
+      .callout {
+        border-radius: 12px;
+        border: 1px solid;
+        padding: 0.75rem 0.8rem;
+        margin: 0.7rem 0;
+      }
+
+      .callout.warn {
+        border-color: rgba(255, 209, 102, 0.45);
+        background: rgba(255, 209, 102, 0.08);
+      }
+
+      .callout.ok {
+        border-color: rgba(95, 255, 161, 0.45);
+        background: rgba(95, 255, 161, 0.08);
+      }
+
+      .code-wrap {
+        margin-top: 0.55rem;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .code-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        background: var(--bg-elev);
+        border-bottom: 1px solid var(--line);
+        padding: 0.45rem 0.55rem;
+      }
+
+      .code-title {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        letter-spacing: 0.2px;
+      }
+
+      .copy-btn {
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text);
+        font-size: 0.78rem;
+        border-radius: 8px;
+        padding: 0.24rem 0.5rem;
+        cursor: pointer;
+      }
+
+      .copy-btn:hover {
+        border-color: var(--accent);
+      }
+
+      pre {
+        margin: 0;
+        overflow-x: auto;
+        padding: 0.8rem;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        color: #d5ddff;
+      }
+
+      .footer {
+        margin-top: 1.4rem;
+        text-align: center;
+        color: #7f8eb8;
+        font-size: 0.86rem;
+      }
+
+      @media (max-width: 920px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          position: static;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-inner">
+        <div class="logo">
+          <span class="logo-dot" aria-hidden="true"></span>
+          <span>skills-sync Troubleshooting</span>
+        </div>
+        <div class="header-actions">
+          <a class="btn" href="./index.html">Docs Index</a>
+          <a class="btn" href="./troubleshooting.md">View Markdown</a>
+          <a class="btn" href="../README.md">Back to README</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="hero">
+        <p class="eyebrow">Private Repo Auth + CLI Diagnostics</p>
+        <h1>Fix skills-sync failures fast</h1>
+        <p>
+          Use this guide when `skills-sync` cannot access repositories, especially private GitHub repos. The checks
+          below are ordered for the fastest path to a working setup.
+        </p>
+        <div class="grid">
+          <div class="pill">
+            <strong>Start command</strong>
+            <span>Run `skills-sync doctor` first.</span>
+          </div>
+          <div class="pill">
+            <strong>Auth order</strong>
+            <span>`--token` -> env token -> `gh auth token`.</span>
+          </div>
+          <div class="pill">
+            <strong>Private repos</strong>
+            <span>Require read access + valid auth.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="layout">
+        <aside>
+          <h2>On this page</h2>
+          <ul class="toc">
+            <li><a href="#health-check">Quick health check</a></li>
+            <li><a href="#private-repos">Private repository access failures</a></li>
+            <li><a href="#auth-order">Auth resolution order</a></li>
+            <li><a href="#permissions">Token permission notes</a></li>
+            <li><a href="#symptoms">Common symptoms and fixes</a></li>
+          </ul>
+        </aside>
+
+        <div>
+          <section id="health-check">
+            <h2>Quick health check</h2>
+            <p>Run the doctor command to validate config, auth, GitHub API reachability, and repo access.</p>
+            <div class="code-wrap">
+              <div class="code-head">
+                <span class="code-title">CLI</span>
+                <button class="copy-btn" data-copy="doctor-main">Copy</button>
+              </div>
+              <pre id="doctor-main">skills-sync doctor</pre>
+            </div>
+            <p>If you use the Node package command name:</p>
+            <div class="code-wrap">
+              <div class="code-head">
+                <span class="code-title">Node CLI</span>
+                <button class="copy-btn" data-copy="doctor-node">Copy</button>
+              </div>
+              <pre id="doctor-node">skills-sync-node doctor</pre>
+            </div>
+          </section>
+
+          <section id="private-repos">
+            <h2>Private repository access failures</h2>
+            <p>If sync fails for a private repo, follow this sequence.</p>
+
+            <h3>1) Confirm account access</h3>
+            <p>Check that your account/token can read the repository:</p>
+            <div class="code-wrap">
+              <div class="code-head">
+                <span class="code-title">GitHub API probe</span>
+                <button class="copy-btn" data-copy="api-check">Copy</button>
+              </div>
+              <pre id="api-check">gh api repos/&lt;owner&gt;/&lt;repo&gt;</pre>
+            </div>
+            <div class="callout warn">If this returns 404 or 403, request repo access first.</div>
+
+            <h3>2) Confirm GitHub auth on your machine</h3>
+            <div class="code-wrap">
+              <div class="code-head">
+                <span class="code-title">Auth status</span>
+                <button class="copy-btn" data-copy="auth-status">Copy</button>
+              </div>
+              <pre id="auth-status">gh auth status</pre>
+            </div>
+            <p>If needed:</p>
+            <div class="code-wrap">
+              <div class="code-head">
+                <span class="code-title">Login</span>
+                <button class="copy-btn" data-copy="auth-login">Copy</button>
+              </div>
+              <pre id="auth-login">gh auth login</pre>
+            </div>
+
+            <h3>3) Use explicit token auth (recommended in CI)</h3>
+            <div class="code-wrap">
+              <div class="code-head">
+                <span class="code-title">Token-based run</span>
+                <button class="copy-btn" data-copy="token-run">Copy</button>
+              </div>
+              <pre id="token-run">export GITHUB_TOKEN=ghp_xxx
+skills-sync --token "$GITHUB_TOKEN"</pre>
+            </div>
+          </section>
+
+          <section id="auth-order">
+            <h2>Auth resolution order</h2>
+            <p>`skills-sync` resolves GitHub auth in this order:</p>
+            <ol>
+              <li><code>--token</code></li>
+              <li><code>GITHUB_TOKEN</code> or <code>GH_TOKEN</code></li>
+              <li><code>gh auth token</code></li>
+            </ol>
+            <div class="callout ok">Use `--token` for deterministic behavior in CI and scripted runs.</div>
+          </section>
+
+          <section id="permissions">
+            <h2>Token permission notes</h2>
+            <ul>
+              <li>Fine-grained PATs need read access to the target repository.</li>
+              <li>Classic PATs should include repo read scope for private repositories.</li>
+            </ul>
+          </section>
+
+          <section id="symptoms">
+            <h2>Common symptoms and fixes</h2>
+
+            <h3>"No GitHub auth detected"</h3>
+            <p>Fix one of:</p>
+            <ul>
+              <li>run <code>gh auth login</code></li>
+              <li>export <code>GITHUB_TOKEN</code></li>
+              <li>pass <code>--token</code> explicitly</li>
+            </ul>
+
+            <h3>"GitHub API unreachable"</h3>
+            <p>Check network and GitHub status, then retry:</p>
+            <div class="code-wrap">
+              <div class="code-head">
+                <span class="code-title">Connectivity check</span>
+                <button class="copy-btn" data-copy="curl-check">Copy</button>
+              </div>
+              <pre id="curl-check">curl -I https://api.github.com</pre>
+            </div>
+
+            <h3>Repo listed in config but "unreachable"</h3>
+            <ul>
+              <li>Verify <code>owner/repo</code> is correct in config.</li>
+              <li>Confirm default branch exists and repo is not archived or renamed.</li>
+              <li>Re-run <code>skills-sync doctor</code> after fixing auth or config.</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+
+      <p class="footer">skills-utils docs - troubleshooting page</p>
+    </main>
+
+    <script>
+      const buttons = document.querySelectorAll(".copy-btn");
+      for (const button of buttons) {
+        button.addEventListener("click", async () => {
+          const targetId = button.getAttribute("data-copy");
+          const node = document.getElementById(targetId);
+          if (!node) return;
+          const text = node.textContent || "";
+          try {
+            await navigator.clipboard.writeText(text);
+            const original = button.textContent;
+            button.textContent = "Copied";
+            setTimeout(() => {
+              button.textContent = original;
+            }, 1200);
+          } catch {
+            button.textContent = "Failed";
+            setTimeout(() => {
+              button.textContent = "Copy";
+            }, 1200);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

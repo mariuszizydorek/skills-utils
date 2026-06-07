@@ -46,7 +46,12 @@ def run_doctor(args: Any) -> int:
     if token:
         results.append(CheckResult("ok", "GitHub token available"))
     else:
-        results.append(CheckResult("warn", "No GITHUB_TOKEN — private repos will fail (public OK)"))
+        results.append(
+            CheckResult(
+                "warn",
+                "No GitHub auth detected - set GITHUB_TOKEN/GH_TOKEN, pass --token, or run gh auth login (public repos OK)",
+            )
+        )
 
     with GitHubClient(token=token) as client:
         if client.ping():

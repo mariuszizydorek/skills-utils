@@ -1,5 +1,7 @@
 # skills-utils
 
+[![Docs](https://img.shields.io/badge/docs-github_pages-56abff)](https://mariuszizydorek.github.io/skills-utils/)
+
 Sync agent skills from GitHub repos into Cursor, Claude Code, or Copilot — no git clone required.
 
 ## What it is for
@@ -95,7 +97,41 @@ Flat symlinks (`~/.cursor/skills/pdf` → `anthropics/pdf`) are created by defau
 
 Edit `~/.skills-utils/config.yaml` or the template [`config.yaml`](config.yaml). Override with `--config` or `SKILLS_UTILS_CONFIG`.
 
-For private repos, use `gh auth login` or set `GITHUB_TOKEN`.
+For private repos, authenticate first with `gh auth login`, or pass a token with `--token`, `GITHUB_TOKEN`, or `GH_TOKEN`.
+
+### Troubleshooting private-repo failures
+
+Start with:
+
+```bash
+skills-sync doctor
+```
+
+Then use the full troubleshooting playbook:
+
+- Markdown: [`docs/troubleshooting.md`](docs/troubleshooting.md)
+- HTML: [`docs/troubleshooting.html`](docs/troubleshooting.html)
+
+Quick auth reminder:
+
+- Resolution order: `--token` -> `GITHUB_TOKEN`/`GH_TOKEN` -> `gh auth token`
+
+## Documentation (GitHub Pages)
+
+This repo publishes `docs/` to GitHub Pages using `.github/workflows/pages.yml`.
+
+- Docs index: `https://<owner>.github.io/skills-utils/`
+- Troubleshooting page: `https://<owner>.github.io/skills-utils/troubleshooting.html`
+
+One-time setup in GitHub:
+
+1. Open **Settings -> Pages**
+2. Set **Source** to **GitHub Actions**
+3. Push to `main` (or run the **Pages** workflow manually)
+
+Release-note helper:
+
+- Snippet template: [`docs/release-notes-snippet.md`](docs/release-notes-snippet.md)
 
 ## Development
 

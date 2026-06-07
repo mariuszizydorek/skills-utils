@@ -27,7 +27,12 @@ export async function runDoctor(args: any): Promise<number> {
 
   const token = args.token ?? (await GitHubClient.detectToken());
   if (token) results.push({ level: "ok", message: "GitHub token available" });
-  else results.push({ level: "warn", message: "No GITHUB_TOKEN — private repos will fail (public OK)" });
+  else
+    results.push({
+      level: "warn",
+      message:
+        "No GitHub auth detected - set GITHUB_TOKEN/GH_TOKEN, pass --token, or run gh auth login (public repos OK)",
+    });
 
   const client = new GitHubClient(token);
   if (await client.ping()) results.push({ level: "ok", message: "GitHub API reachable" });

@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>skills-utils Docs</title>
+    <style>
+      :root {
+        --bg: #0a0f1a;
+        --bg-elev: #0f1729;
+        --line: #253250;
+        --text: #dce6ff;
+        --muted: #a2b0d8;
+        --accent: #56abff;
+        --accent-2: #72ffd2;
+        --shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background:
+          radial-gradient(1200px 700px at -15% -10%, rgba(86, 171, 255, 0.17), transparent 55%),
+          radial-gradient(900px 550px at 110% 0%, rgba(114, 255, 210, 0.14), transparent 50%),
+          var(--bg);
+        color: var(--text);
+        font:
+          16px/1.55 "IBM Plex Sans", "Segoe UI", "Helvetica Neue", "Arial",
+          sans-serif;
+      }
+
+      .container {
+        width: min(980px, 92vw);
+        margin: 0 auto;
+        padding: 2.2rem 0 4rem;
+      }
+
+      .hero {
+        border: 1px solid rgba(86, 171, 255, 0.26);
+        background: linear-gradient(180deg, rgba(86, 171, 255, 0.1), rgba(86, 171, 255, 0.01));
+        border-radius: 20px;
+        padding: 1.2rem 1.25rem;
+        box-shadow: var(--shadow);
+      }
+
+      .eyebrow {
+        margin: 0 0 0.45rem;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.9px;
+        color: var(--accent-2);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.5rem, 2.1vw + 1rem, 2.35rem);
+        line-height: 1.2;
+      }
+
+      .hero p {
+        margin: 0.75rem 0 0;
+        color: var(--muted);
+        max-width: 72ch;
+      }
+
+      .meta {
+        margin: 0.65rem 0 0;
+        color: #8ea0d3;
+        font-size: 0.9rem;
+      }
+
+      .cards {
+        margin-top: 1.1rem;
+        display: grid;
+        gap: 0.95rem;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .sitemap {
+        margin-top: 1rem;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg-elev);
+        padding: 0.95rem;
+        box-shadow: var(--shadow);
+      }
+
+      .sitemap h2 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+
+      .sitemap p {
+        margin: 0.45rem 0 0.7rem;
+        color: var(--muted);
+        font-size: 0.93rem;
+      }
+
+      .sitemap-list {
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+
+      .sitemap-list li {
+        margin: 0.3rem 0;
+        color: var(--muted);
+      }
+
+      .sitemap-list a {
+        color: var(--text);
+      }
+
+      .sitemap-list a:hover {
+        color: #ffffff;
+      }
+
+      .doc-tag {
+        margin-left: 0.45rem;
+        font-size: 0.73rem;
+        color: #95a8dc;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0.08rem 0.45rem;
+        vertical-align: middle;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg-elev);
+        padding: 0.95rem;
+        box-shadow: var(--shadow);
+      }
+
+      .card h2 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+
+      .card p {
+        margin: 0.55rem 0 0.75rem;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .link {
+        display: inline-block;
+        text-decoration: none;
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 0.45rem 0.74rem;
+        font-size: 0.9rem;
+      }
+
+      .link:hover {
+        border-color: var(--accent);
+      }
+
+      .footer {
+        margin-top: 1.2rem;
+        color: #8092c6;
+        font-size: 0.88rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <section class="hero">
+        <p class="eyebrow">skills-utils documentation</p>
+        <h1>Project docs on GitHub Pages</h1>
+        <p>
+          This is the landing page for published documentation. Use the links below to open troubleshooting and
+          reference docs.
+        </p>
+        <p class="meta">Last updated: <time datetime="2026-06-07">2026-06-07</time></p>
+      </section>
+
+      <section class="cards" aria-label="Documentation links">
+        <article class="card">
+          <h2>Troubleshooting (HTML)</h2>
+          <p>Styled troubleshooting guide for private GitHub repository authentication and CLI failures.</p>
+          <a class="link" href="./troubleshooting.html">Open guide</a>
+        </article>
+
+        <article class="card">
+          <h2>Troubleshooting (Markdown)</h2>
+          <p>Raw markdown source of the troubleshooting guide.</p>
+          <a class="link" href="./troubleshooting.md">Open markdown</a>
+        </article>
+
+        <article class="card">
+          <h2>Manifest Schema</h2>
+          <p>Manifest/hash contract and compatibility details used by Python and Node implementations.</p>
+          <a class="link" href="./manifest-schema.md">Open schema doc</a>
+        </article>
+      </section>
+
+      <section class="sitemap" aria-label="Documentation sitemap">
+        <h2>Documentation sitemap</h2>
+        <p>Auto-generated from files in `docs/` during Pages deployment.</p>
+        <ul class="sitemap-list">
+          <!-- DOCS_SITEMAP_START -->
+          <li><a href="./manifest-schema.md">manifest-schema.md</a><span class="doc-tag">md</span></li>
+          <li><a href="./release-notes-snippet.md">release-notes-snippet.md</a><span class="doc-tag">md</span></li>
+          <li><a href="./troubleshooting.html">troubleshooting.html</a><span class="doc-tag">html</span></li>
+          <li><a href="./troubleshooting.md">troubleshooting.md</a><span class="doc-tag">md</span></li>
+          <!-- DOCS_SITEMAP_END -->
+        </ul>
+      </section>
+
+      <p class="footer">skills-utils docs index</p>
+    </main>
+  </body>
+</html>
