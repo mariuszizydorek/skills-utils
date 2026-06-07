@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -14,18 +13,8 @@ def expand_path(value: str, cwd: Path | None = None) -> Path:
 
 
 def project_root(cwd: Path | None = None) -> Path:
-    base = cwd or Path.cwd()
-    try:
-        result = subprocess.run(
-            ["git", "rev-parse", "--show-toplevel"],
-            cwd=base,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return Path(result.stdout.strip())
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        return base
+    # Project-scoped installs should target the directory where the user runs the CLI.
+    return cwd or Path.cwd()
 
 
 def resolve_skills_dir(agent: dict[str, Any], cwd: Path | None = None) -> Path:

@@ -87,7 +87,7 @@ Skills install to agent dirs:
 | Claude Code (project) | `<project>/.claude/skills/<repo>/<skill>/` |
 | Copilot (project) | `<project>/.github/skills/<repo>/<skill>/` |
 
-Run project-scoped agents **from inside the project** (or its git root).
+Run project-scoped agents from the exact directory you want to receive `.cursor/skills`, `.claude/skills`, or `.github/skills`.
 
 Flat symlinks (`~/.cursor/skills/pdf` → `anthropics/pdf`) are created by default so agents can discover skills.
 

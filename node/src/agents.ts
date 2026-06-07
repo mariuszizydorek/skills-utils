@@ -1,9 +1,5 @@
-import { execFile } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
-import { promisify } from "node:util";
-
-const execFileAsync = promisify(execFile);
 
 export function expandPath(value: string, cwd = process.cwd()): string {
   const expanded = value.startsWith("~") ? path.join(os.homedir(), value.slice(1)) : value;
@@ -11,12 +7,8 @@ export function expandPath(value: string, cwd = process.cwd()): string {
 }
 
 export async function projectRoot(cwd = process.cwd()): Promise<string> {
-  try {
-    const { stdout } = await execFileAsync("git", ["rev-parse", "--show-toplevel"], { cwd });
-    return stdout.trim();
-  } catch {
-    return cwd;
-  }
+  // Project-scoped installs should target the directory where the user runs the CLI.
+  return cwd;
 }
 
 export async function resolveSkillsDir(agent: any, cwd = process.cwd()): Promise<string> {
