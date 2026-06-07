@@ -118,8 +118,19 @@ cd node && npm run build && npm test
 One-time setup:
 
 1. Create a [PyPI API token](https://pypi.org/manage/account/token/) with upload scope for `skills-utils-mi`
-2. Create an [npm access token](https://www.npmjs.com/settings/~youruser/tokens) with publish scope
-3. For GitHub Actions (recommended): add repo secrets `NPM_TOKEN` and enable [PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/) for this repo
+2. Configure npm [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) for package `skills-sync-node-mi` with this GitHub Actions workflow (`publish.yml`)
+3. Enable [PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/) for this repo
+
+Notes for npm trusted publishing:
+
+- npm trusted publishing removes `NPM_TOKEN` from GitHub secrets.
+- If package does not exist yet, do one bootstrap manual publish before setting trusted publisher.
+- Use `npm publish --access public --provenance` in CI (already configured).
+
+Optional fallback (token-based CI, not recommended):
+
+- Create an npm token and store it as GitHub secret `NPM_TOKEN`.
+- A `403 Forbidden ... You may not perform that action with these credentials` usually means token permission/scope mismatch.
 
 Manual publish:
 
