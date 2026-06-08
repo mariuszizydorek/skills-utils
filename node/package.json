@@ -28,7 +28,7 @@
     "skills-sync-node": "./dist/cli.js"
   },
   "scripts": {
-    "build": "tsc && cp src/bundled_config.yaml dist/",
+    "build": "tsc && cp src/bundled_config.yaml dist/ && cp ../README.md README.md",
     "test": "node --test tests/*.test.js",
     "prepublishOnly": "npm run build"
   },

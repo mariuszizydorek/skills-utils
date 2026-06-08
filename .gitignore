@@ -7,3 +7,6 @@ node_modules/
 python/dist/
 *.egg-info/
 .env
+
+# Copied from root README by `npm run build` so npm publish ships it
+node/README.md
